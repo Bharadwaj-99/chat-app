@@ -1,4 +1,5 @@
 let socket;
+const BACKEND_URL = "https://server-1l3h.onrender.com";
 
 async function register() {
   const username = document.getElementById("reg-username").value;
@@ -6,7 +7,7 @@ async function register() {
   const email = document.getElementById("reg-email").value;
 
   try {
-    const response = await fetch("/api/auth/register", {
+    const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password, email }),
@@ -23,7 +24,7 @@ async function login() {
   const password = document.getElementById("login-password").value;
 
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -45,7 +46,7 @@ async function login() {
 
 function connectWebSocket() {
   const token = localStorage.getItem("token");
-  socket = new WebSocket(`ws://${window.location.host}?token=${token}`);
+  socket = new WebSocket(`wss://${new URL(BACKEND_URL).host}?token=${token}`);
 
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
@@ -66,6 +67,7 @@ function sendMessage() {
     messageInput.value = "";
   }
 }
+
 
 function displayMessage(message) {
  
@@ -91,7 +93,7 @@ function displayMessage(message) {
 
 async function loadMessages() {
   try {
-    const response = await fetch("/api/messages", {
+    const response = await fetch(`${BACKEND_URL}/api/messages`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const messages = await response.json();
