@@ -7,7 +7,7 @@ async function register() {
   const email = document.getElementById("reg-email").value;
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+    const response = await fetch('https://server-1l3h.onrender.com/api/auth/register', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password, email }),
